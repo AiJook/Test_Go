@@ -34,20 +34,23 @@ func searchItems(c *gin.Context) {
 		MaxPrice    float64 `json:"max_price"`
 	}
 
+	// รับค่า JSON ที่ส่งมา
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
 	var items []model.Product
-
+	// สร้าง query ตามเงื่อนไขทั้งหมด
 	query := Idb.Model(&items)
-	query = query.Where("description LIKE ? AND price >= ? and price <= ?", "%"+input.Description+"%", input.MinPrice, input.MaxPrice)
+	query = query.Where("description LIKE ? AND price BETWEEN ? AND ?", "%"+input.Description+"%", input.MinPrice, input.MaxPrice)
 
+	// ค้นหาผลลัพธ์
 	if err := query.Find(&items).Error; err != nil {
 		c.JSON(404, gin.H{"error": "No products found"})
 		return
 	}
 
+	// ส่งผลลัพธ์กลับไป
 	c.JSON(200, items)
 }
