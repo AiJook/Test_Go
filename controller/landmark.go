@@ -2,6 +2,7 @@ package controller
 
 import (
 	"test_go/model"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
@@ -16,6 +17,6 @@ func LanmarkController(router *gin.Engine, db *gorm.DB) {
 
 func getLandmark(c *gin.Context) {
 	landmarks := []model.Landmark{}
-	Ldb.Find(&landmarks)
+	Ldb.Preload("Country").Find(&landmarks)
 	c.JSON(200, landmarks)
 }

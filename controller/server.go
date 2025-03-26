@@ -32,8 +32,11 @@ func StartServer() {
 		})
 	})
 
-	LanmarkController(router, db)
-	CountryController(router, db)
+	CustomerController(router, db)
+	ItemCartController(router, db)
+
+	// LanmarkController(router, db)
+	// CountryController(router, db)
 
 	router.Run()
 
